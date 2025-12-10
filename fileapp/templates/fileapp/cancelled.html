@@ -1,0 +1,14 @@
+{% extends "fileapp/base.html" %}
+{% block content %}
+
+<h2>Sharing Cancelled</h2>
+
+<div class="info-box">
+    File sharing has been stopped.
+</div>
+
+<a href="{% url 'home' %}">
+    <button>Go Home</button>
+</a>
+
+{% endblock %}

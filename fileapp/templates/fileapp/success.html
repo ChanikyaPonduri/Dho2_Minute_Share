@@ -1,0 +1,49 @@
+{% extends "fileapp/base.html" %}
+{% block content %}
+
+<h2>Upload Successful</h2>
+
+<div class="info-box">
+    <strong>Your Code:</strong>
+    <span style="font-size:22px">{{ code }}</span><br><br>
+    <strong>Expires in:</strong>
+    <span id="timer" style="font-weight:bold; font-size:20px;">02:00</span>
+</div>
+
+<div id="expired-box" class="error-box" style="display:none;">
+    Code expired. Please upload again.
+</div>
+
+<a href="{% url 'download' %}">
+    <button>Go to Receive Page</button>
+</a>
+
+<a href="{% url 'home' %}">
+    <button class="back-btn" style="margin-top:15px;">Back</button>
+</a>
+
+<a href="{% url 'cancel' code=code %}">
+    <button style="margin-top:15px; background:#c0392b;">Cancel Sharing</button>
+</a>
+
+<script>
+    let seconds = 120;
+
+    function updateTimer() {
+        if (seconds <= 0) {
+            document.getElementById('timer').innerHTML = "00:00";
+            document.getElementById('expired-box').style.display = "block";
+            window.location.href = "{% url 'cancel' code=code %}";
+            return;
+        }
+        seconds--;
+        let m = String(Math.floor(seconds / 60)).padStart(2, '0');
+        let s = String(seconds % 60).padStart(2, '0');
+        document.getElementById('timer').innerHTML = m + ":" + s;
+        setTimeout(updateTimer, 1000);
+    }
+
+    updateTimer();
+</script>
+
+{% endblock %}

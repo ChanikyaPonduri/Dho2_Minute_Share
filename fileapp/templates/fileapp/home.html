@@ -1,0 +1,13 @@
+{% extends "fileapp/base.html" %}
+{% block content %}
+<h2>Secure File Sharing</h2>
+
+<a href="{% url 'upload' %}">
+    <button>Send File</button>
+</a>
+
+<a href="{% url 'download' %}">
+    <button style="margin-top:15px;">Receive File</button>
+</a>
+
+{% endblock %}

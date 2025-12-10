@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Encrypted File Share</title>
+    <style>
+        body { background:#f2f2f2; font-family: Arial; margin:0; padding:0; }
+        .container { width:400px; margin:60px auto; background:white; padding:30px; border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.1); }
+        h2 { color:#333; text-align:center; margin-bottom:20px; }
+        label { color:#555; }
+        input[type="file"], input[type="text"] { width:100%; padding:10px; border:1px solid #ccc; border-radius:5px; }
+        button { width:100%; padding:12px; background:#2c3e50; color:white; border:none; border-radius:5px; cursor:pointer; }
+        button:hover { background:#1a242f; }
+        .info-box { background:#e8f4ff; padding:12px; border-left:4px solid #2980b9; margin-bottom:15px; }
+        .error-box { background:#ffe6e6; padding:12px; border-left:4px solid #c0392b; margin-bottom:15px; }
+        a { text-decoration:none; width:100%; display:block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
+
+
+<style>
+button {
+    width:100%;
+    padding:12px;
+    background:#2c3e50;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-weight:bold;
+}
+button:hover {
+    background:#1a242f;
+}
+
+.back-btn {
+    background:#7f8c8d !important;
+}
+.back-btn:hover {
+    background:#5e6b6e !important;
+}
+</style>

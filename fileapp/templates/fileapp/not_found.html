@@ -1,0 +1,14 @@
+{% extends "fileapp/base.html" %}
+{% block content %}
+
+<h2>Code Not Found</h2>
+
+<div class="error-box">
+    This code is invalid or has expired.
+</div>
+
+<a href="{% url 'download' %}">
+    <button>Try Again</button>
+</a>
+
+{% endblock %}

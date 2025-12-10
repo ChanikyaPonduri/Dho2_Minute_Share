@@ -1,0 +1,20 @@
+{% extends "fileapp/base.html" %}
+{% block content %}
+<h2>Enter Code</h2>
+
+{% if error %}
+<div class="error-box">{{ error }}</div>
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.code.label }}<br>
+    {{ form.code }}
+    <button type="submit">Download File</button>
+</form>
+
+<a href="{% url 'home' %}">
+    <button class="back-btn" style="margin-top:15px;">Back</button>
+</a>
+
+{% endblock %}
