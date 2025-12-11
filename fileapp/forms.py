@@ -2,7 +2,7 @@ from django import forms
 
 class UploadForm(forms.Form):
     files = forms.FileField(
-        widget=forms.ClearableFileInput(attrs={'multiple': True}),
+        widget=forms.FileInput(attrs={'multiple': True}),
         required=True
     )
 
