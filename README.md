@@ -68,7 +68,7 @@ Recipient Enters OTP → Server Verifies → Decrypts → Downloads File →
 File expires after 2 minutes or manual cancellation.
 
 
-## PROJECT STRUCTURE (Simplified)
+## PROJECT STRUCTURE
 
 Dho2_Minute_Share/
 │   manage.py
