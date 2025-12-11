@@ -1,10 +1,7 @@
 from django import forms
 
 class UploadForm(forms.Form):
-    files = forms.FileField(
-        widget=forms.FileInput(attrs={'multiple': True}),
-        required=True
-    )
+    file = forms.FileField()
 
 class CodeForm(forms.Form):
     code = forms.CharField(max_length=6)

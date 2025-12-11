@@ -2,12 +2,12 @@
 {% block content %}
 <h2>Upload File</h2>
 
-<form method="post" enctype="multipart/form-data">
+<form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    <input type="file" name="files" multiple required>
+    {{ form.file.label }}<br>
+    {{ form.file }}
     <button type="submit">Upload</button>
 </form>
-
 
 <a href="{% url 'home' %}">
     <button class="back-btn" style="margin-top:15px;">Back</button>
