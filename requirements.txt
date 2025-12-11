@@ -6,3 +6,4 @@ djangorestframework==3.16.1
 pycparser==2.23
 sqlparse==0.5.3
 tzdata==2025.2
+gunicorn==21.2.0
