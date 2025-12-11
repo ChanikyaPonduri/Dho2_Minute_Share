@@ -4,8 +4,9 @@
 
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.file.label }}<br>
-    {{ form.file }}
+    {{ form.files.label }}<br>
+    {{ form.files }}
+
     <button type="submit">Upload</button>
 </form>
 

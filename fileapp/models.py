@@ -4,13 +4,14 @@ from datetime import timedelta
 
 class FileShare(models.Model):
     code = models.CharField(max_length=6, unique=True)
-    file_path = models.CharField(max_length=500)
-    encrypted_key = models.TextField()
-    original_filename = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+    encrypted_key = models.BinaryField()
+    file1_path = models.CharField(max_length=500, blank=True, null=True)
+    file2_path = models.CharField(max_length=500, blank=True, null=True)
+    file3_path = models.CharField(max_length=500, blank=True, null=True)
+    file1_original = models.CharField(max_length=255, blank=True, null=True)
+    file2_original = models.CharField(max_length=255, blank=True, null=True)
+    file3_original = models.CharField(max_length=255, blank=True, null=True)
 
     def is_expired(self):
-        return timezone.now() > self.created_at + timedelta(minutes=2)
-
-    def expiry_time(self):
-        return self.created_at + timedelta(minutes=2)
+        return self.created_at < timezone.now() - timedelta(minutes=2)

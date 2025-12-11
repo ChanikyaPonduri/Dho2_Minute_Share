@@ -29,28 +29,46 @@ def upload_view(request):
     if request.method == "POST":
         form = UploadForm(request.POST, request.FILES)
         if form.is_valid():
-            f = request.FILES["file"]
-            original = f.name
-            data = f.read()
-
-            payload, wrapped = encrypt_bytes(data)
+            uploaded = request.FILES.getlist("files")
+            uploaded = uploaded[:3]
 
             enc_dir = "/tmp/encrypted"
             os.makedirs(enc_dir, exist_ok=True)
 
-            filename = f"{uuid.uuid4().hex}.enc"
-            fullpath = f"/tmp/encrypted/{filename}"
+            filepaths = []
+            originals = []
+            key = None
 
-            with open(fullpath, "wb") as fh:
-                fh.write(payload)
+            for f in uploaded:
+                data = f.read()
+                payload, wrapped = encrypt_bytes(data)
+                if key is None:
+                    key = wrapped
+
+                filename = f"{uuid.uuid4().hex}.enc"
+                fullpath = f"/tmp/encrypted/{filename}"
+
+                with open(fullpath, "wb") as fh:
+                    fh.write(payload)
+
+                filepaths.append(fullpath)
+                originals.append(f.name)
+
+            while len(filepaths) < 3:
+                filepaths.append(None)
+                originals.append(None)
 
             code = _generate_unique_code()
 
             FileShare.objects.create(
                 code=code,
-                file_path=fullpath,
-                encrypted_key=wrapped,
-                original_filename=original
+                encrypted_key=key,
+                file1_path=filepaths[0],
+                file2_path=filepaths[1],
+                file3_path=filepaths[2],
+                file1_original=originals[0],
+                file2_original=originals[1],
+                file3_original=originals[2],
             )
 
             return render(request, "fileapp/success.html", {"code": code})
@@ -61,7 +79,6 @@ def upload_view(request):
 
 def download_view(request):
     clean_expired()
-    error = None
     if request.method == "POST":
         form = CodeForm(request.POST)
         if form.is_valid():
@@ -69,32 +86,51 @@ def download_view(request):
 
             try:
                 rec = FileShare.objects.get(code=code)
-            except FileShare.DoesNotExist:
+            except:
                 return render(request, "fileapp/not_found.html")
 
             if rec.is_expired():
                 return render(request, "fileapp/not_found.html")
 
-            full = rec.file_path
-            if not os.path.exists(full):
+            files = [
+                (rec.file1_path, rec.file1_original),
+                (rec.file2_path, rec.file2_original),
+                (rec.file3_path, rec.file3_original),
+            ]
+
+            outputs = []
+
+            for path, name in files:
+                if path and os.path.exists(path):
+                    with open(path, "rb") as fh:
+                        payload = fh.read()
+                    plain = decrypt_bytes(payload, rec.encrypted_key)
+                    outputs.append((plain, name))
+
+            if not outputs:
                 return render(request, "fileapp/not_found.html")
 
-            with open(full, "rb") as fh:
-                payload = fh.read()
+            if len(outputs) == 1:
+                data, name = outputs[0]
+                resp = HttpResponse(data, content_type="application/octet-stream")
+                resp["Content-Disposition"] = f'attachment; filename="{name}"'
+                return resp
 
-            try:
-                plain = decrypt_bytes(payload, rec.encrypted_key)
-            except:
-                return render(request, "fileapp/not_found.html")
+            import zipfile
+            import io
+            z = io.BytesIO()
+            with zipfile.ZipFile(z, "w") as zipf:
+                for data, name in outputs:
+                    zipf.writestr(name, data)
+            z.seek(0)
 
-            response = HttpResponse(plain, content_type="application/octet-stream")
-            response["Content-Disposition"] = f'attachment; filename="{rec.original_filename}"'
-            return response
-
+            resp = HttpResponse(z.read(), content_type="application/zip")
+            resp["Content-Disposition"] = 'attachment; filename="files.zip"'
+            return resp
     else:
         form = CodeForm()
 
-    return render(request, "fileapp/download.html", {"form": form, "error": error})
+    return render(request, "fileapp/download.html", {"form": form})
 
 def cancel_share(request, code):
     try:
