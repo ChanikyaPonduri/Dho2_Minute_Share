@@ -71,11 +71,12 @@ File expires after 2 minutes or manual cancellation.
 ## PROJECT STRUCTURE
 
 Dho2_Minute_Share/
-│   manage.py
-│   settings.py
-│   urls.py
-│   wsgi.py
-│   requirements.txt
+│
+├── manage.py
+├── settings.py
+├── urls.py
+├── wsgi.py
+├── requirements.txt
 │
 ├── fileapp/
 │   ├── views.py
@@ -85,11 +86,11 @@ Dho2_Minute_Share/
 │   ├── cleaners.py
 │   └── templates/
 │       └── fileapp/
-│           home.html
-│           upload.html
-│           success.html
-│           download.html
-│           cancelled.html
+│           ├── home.html
+│           ├── upload.html
+│           ├── success.html
+│           ├── download.html
+│           └── cancelled.html
 │
 └── staticfiles/
 
