@@ -1,7 +1,9 @@
 from django import forms
 
 class UploadForm(forms.Form):
-    files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
+    files = forms.FileField(widget=forms.FileInput(attrs={'multiple': True})
+)
+
 
 
 class CodeForm(forms.Form):
