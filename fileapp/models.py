@@ -8,7 +8,7 @@ class FileShare(models.Model):
     encrypted_key = models.BinaryField()
     file1_path = models.CharField(max_length=500, blank=True, null=True)
     file2_path = models.CharField(max_length=500, blank=True, null=True)
-    file3_path = models.CharField(max_length=500, blank=True, null=True)
+    file3_path = models.CharCharField(max_length=500, blank=True, null=True)
     file1_original = models.CharField(max_length=255, blank=True, null=True)
     file2_original = models.CharField(max_length=255, blank=True, null=True)
     file3_original = models.CharField(max_length=255, blank=True, null=True)
